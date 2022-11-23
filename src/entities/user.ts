@@ -4,26 +4,26 @@ import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
 class User {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id!: number;
 
     @Column()
-    firstname: string;
+    firstname!: string;
     
     @Column()
-    lastname: string;
+    lastname!: string;
     
     @Column()
-    email: string;
+    email!: string;
     
     @Column()
-    passwordHash: string;
+    passwordHash!: string;
 
-    constructor(id: number, firstname: string, lastname: string, email: string, passwordHash: string) {
-        this.id = id;
+    constructor(firstname: string, lastname: string, passwordHash: string, email?: string) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.email = email;
         this.passwordHash = passwordHash;
+
+        if (email) this.email = email;
     }
 }
 

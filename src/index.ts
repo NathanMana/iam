@@ -1,3 +1,9 @@
-import runDatasource from "./lib/typeorm";
+import {runDataSource} from "./lib/typeorm";
 
-runDatasource();
+runDataSource()
+    .then(() => {
+        console.log("DONE")
+    })
+    .catch((err) => {
+        console.log("Erreur : ", err)
+    });
