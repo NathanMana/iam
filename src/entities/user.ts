@@ -7,16 +7,16 @@ class User {
     id!: number;
 
     @Column()
-    firstname!: string;
+    firstname: string;
     
     @Column()
-    lastname!: string;
+    lastname: string;
     
     @Column()
     email!: string;
     
     @Column()
-    passwordHash!: string;
+    passwordHash: string;
 
     constructor(firstname: string, lastname: string, passwordHash: string, email?: string) {
         this.firstname = firstname;
