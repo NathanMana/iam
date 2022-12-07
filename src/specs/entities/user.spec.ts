@@ -4,7 +4,7 @@ import { assert } from 'chai'
 import User from './../../entities/user'
 import {runDataSource} from './../../lib/typeorm'
 import userRepository from '../../repositories/userRepository'
-import {QueryFailedError} from 'typeorm'
+import ValidationError from '../../errors/ValidationError'
 
 chai.use(chaiAsPromised)
 
@@ -24,13 +24,15 @@ describe('User', function () {
         const user = new User("Jean", "Marc", "azhkjazhkj62", "jean@marc.fr")
         await userRepository.add(user)
 
-        const userInBDD = await userRepository.findByFirstname('Jean');
-        assert.equal(user.email, userInBDD?.email);
+        const userInBDD = await userRepository.findByFirstname('Jean')
+        assert.equal(user.email, userInBDD?.email)
     })
 
     it('should raise error if email is missing', async function () {
       const user = new User("Jean", "Marc", "azhkjazhkj62")
-      await chai.expect(userRepository.add(user)).to.eventually.be.rejectedWith(QueryFailedError, "Field 'email' doesn't have a default value")
+      await chai.expect(userRepository.add(user))
+        .to.eventually.be.rejectedWith(ValidationError, "Email is required !")
+        .and.include({ target: user, property: 'email' })
     })
   })
 })

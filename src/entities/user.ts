@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from "typeorm"
+import ValidationError from "../errors/ValidationError";
 
 @Entity()
 class User {
@@ -24,6 +25,12 @@ class User {
         this.passwordHash = passwordHash;
 
         if (email) this.email = email;
+    }
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    checkEmail() {
+        if (!this.email) throw new ValidationError("Email is required !", this, "email"); 
     }
 }
 
