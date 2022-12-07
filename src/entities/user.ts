@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate } from "typeorm"
-import ValidationError from "../errors/ValidationError";
+import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Index, ValueTransformer } from "typeorm"
+import { IsEmail, IsNotEmpty } from 'class-validator'
 
 @Entity()
 class User {
@@ -14,6 +14,8 @@ class User {
     lastname: string;
     
     @Column()
+    @Index({unique: true})
+    @IsNotEmpty({message: 'email should not be empty'})
     email!: string;
     
     @Column()
@@ -24,13 +26,13 @@ class User {
         this.lastname = lastname;
         this.passwordHash = passwordHash;
 
-        if (email) this.email = email;
+        if (email) this.email = email.toLowerCase();
     }
 
     @BeforeInsert()
     @BeforeUpdate()
-    checkEmail() {
-        if (!this.email) throw new ValidationError("Email is required !", this, "email"); 
+    formatEmail() {
+        if (this.email) this.email = this.email.toLowerCase();
     }
 }
 
