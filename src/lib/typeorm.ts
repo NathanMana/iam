@@ -3,6 +3,7 @@ import { DataSource } from "typeorm"
 
 // Entities
 import User from '../entities/user'
+import { ValidationSubscriber } from '../subscribers/ValidationSubscriber'
 
 dotenv.config()
 
@@ -14,7 +15,8 @@ export const AppDataSource = new DataSource({
     password: process.env.DBB_PASSWORD,
     database: process.env.NODE_ENV === 'test' ? "iam_test": 'iam',
     entities: [User],
-    synchronize: true
+    synchronize: true,
+    subscribers: [ValidationSubscriber]
 })
 
 export const runDataSource = async () => {

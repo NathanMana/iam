@@ -4,7 +4,6 @@ import { assert } from 'chai'
 import User from './../../entities/user'
 import {runDataSource} from './../../lib/typeorm'
 import userRepository from '../../repositories/userRepository'
-import ValidationError from '../../errors/ValidationError'
 
 chai.use(chaiAsPromised)
 
@@ -31,8 +30,11 @@ describe('User', function () {
     it('should raise error if email is missing', async function () {
       const user = new User("Jean", "Marc", "azhkjazhkj62")
       await chai.expect(userRepository.add(user))
-        .to.eventually.be.rejectedWith(ValidationError, "Email is required !")
-        .and.include({ target: user, property: 'email' })
+        .to.eventually.be.rejected.and.deep.include({
+          target: user,
+          property: 'email',
+          constraints: { isNotEmpty: 'email should not be empty' }
+        })
     })
   })
 })

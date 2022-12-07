@@ -15,3 +15,8 @@ Right now we have a SQL error because we are trying to add a user without email 
 
 We should add a validation before submitting our element to the ORM. By validating before, we do not send anything to the database and we can return an error to the user.\
 By doing so, the back end treatments are faster and controlled.
+
+### Question 3
+Having multiple security layers is never a bad idea. We could imagine multiple function able to edit the database, if we applied the validation in one of these functions 
+and forgot the validation in another one. We can be pretty sure that the database won't insert/edit the element because of the constraints.
+Moreover, with a validation we customize the error to return while a SQLError could display sensitive informations.
