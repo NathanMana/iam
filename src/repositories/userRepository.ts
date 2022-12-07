@@ -27,4 +27,8 @@ const findByFirstname  = async (firstname: string) => {
     return user
 }
 
-export default {truncate, add, findByFirstname};
+const findOneByEmail = async (email: string) => {
+    return userRepository.findOneBy({email: email});
+}
+
+export default {truncate, add, findByFirstname, findOneByEmail};
