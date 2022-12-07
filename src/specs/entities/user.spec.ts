@@ -4,6 +4,7 @@ import { assert } from 'chai'
 import User from './../../entities/user'
 import {runDataSource} from './../../lib/typeorm'
 import userRepository from '../../repositories/userRepository'
+import { QueryFailedError } from 'typeorm'
 
 chai.use(chaiAsPromised)
 
@@ -35,6 +36,21 @@ describe('User', function () {
           property: 'email',
           constraints: { isNotEmpty: 'email should not be empty' }
         })
+    })
+
+    it('should create User with lowercase email', async () => {
+      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR")
+      await userRepository.add(user)
+
+      const userInBDD = await userRepository.findByFirstname('Jean')
+      assert.equal(userInBDD?.email, "jean@marc.fr");
+    })
+
+    it('cannot create two users with same email', async () => {
+      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR")
+      const user2 = new User("Jean2", "Marc2", "azhkjazhkj62v2", "jean@marc.fr")
+      await userRepository.add(user)
+      await chai.expect(userRepository.add(user2)).to.be.eventually.rejectedWith(QueryFailedError)
     })
   })
 })
