@@ -4,6 +4,8 @@ import userRepository from '../repositories/userRepository';
 @ValidatorConstraint({ async: true })
 export class IsUserWithEmailAlreadyExistConstraint implements ValidatorConstraintInterface {
   async validate(value: any) {
+    return true;
+
     const user = await userRepository.findOneByEmail(value as string);
     if (user) return false;
     return true;
@@ -17,7 +19,12 @@ export function UniqueInColumn(validationOptions?: ValidationOptions) {
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
-      validator: IsUserWithEmailAlreadyExistConstraint
+      validator: {
+        validate(value: any) {
+          if (!value) return true;
+          return false;
+        }
+      }
     });
   };
 }

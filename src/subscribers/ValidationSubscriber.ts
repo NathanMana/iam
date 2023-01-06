@@ -6,6 +6,7 @@ import User from "../entities/user";
 export class ValidationSubscriber implements EntitySubscriberInterface {
 
     async beforeInsert(event: InsertEvent<User>) {
+        console.log(event.entity)
         const errors = await validate(event.entity)
         if (!errors.length) return
 

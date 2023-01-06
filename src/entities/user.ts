@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Index, ValueTransformer } from "typeorm"
 import { IsEmail, IsNotEmpty } from 'class-validator'
+import { UniqueInColumn } from "../decorators/uniqueInColumn";
 
 @Entity()
 class User {
@@ -15,6 +16,7 @@ class User {
     
     @Column()
     @Index({unique: true})
+    @UniqueInColumn({message: 'Nique ta mere'})
     @IsNotEmpty({message: 'email should not be empty'})
     email!: string;
     
