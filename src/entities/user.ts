@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Index, ValueTransformer } from "typeorm"
-import { IsEmail, IsNotEmpty } from 'class-validator'
+import { IsEmail, IsNotEmpty, ValidationError } from 'class-validator'
+import * as bcrypt from "bcrypt"
 
 @Entity()
 class User {
@@ -34,7 +35,19 @@ class User {
     formatEmail() {
         if (this.email) this.email = this.email.toLowerCase();
     }
+
+
+    async setPassword(dto: SetPasswordDTO) {
+        if (dto.password !== dto.passwordConfirmation) {
+          throw new ValidationError();
+        }
+        this.passwordHash = await bcrypt.hash(dto.password, 10);
+      }
 }
 
+export interface SetPasswordDTO {
+    password: string;
+    passwordConfirmation: string;
+}
 
 export default User;

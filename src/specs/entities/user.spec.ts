@@ -1,10 +1,11 @@
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import { assert } from 'chai'
+import { assert, use } from 'chai'
 import User from './../../entities/user'
 import {runDataSource} from './../../lib/typeorm'
 import userRepository from '../../repositories/userRepository'
 import { QueryFailedError } from 'typeorm'
+import { ValidationError } from 'class-validator'
 
 chai.use(chaiAsPromised)
 
@@ -53,4 +54,18 @@ describe('User', function () {
       await chai.expect(userRepository.add(user2)).to.be.eventually.rejectedWith(QueryFailedError)
     })
   })
+
+  describe('setPassword', function() {
+    it('should hash the password', async () => {
+      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR");
+      await user.setPassword({password: "password", passwordConfirmation: "password"})
+      chai.expect(user.passwordHash).not.to.be.equal('password')
+    });
+
+    it('should throw a ValidationError if the password does not match', async () => {
+      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR");
+      await user.setPassword({password: "password", passwordConfirmation: "password"})
+      chai.expect(user.setPassword({password: "password", passwordConfirmation: "password"})).to.be.eventually.rejectedWith(ValidationError);
+    });
+  });
 })
