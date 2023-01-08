@@ -1,9 +1,5 @@
-import {runDataSource} from "./lib/typeorm";
+import {getAppDataSource} from "./lib/typeorm";
 
-runDataSource()
-    .then(() => {
-        console.log("DONE")
-    })
-    .catch((err) => {
-        console.log("Erreur : ", err)
-    });
+(async () => {
+    await getAppDataSource().initialize();
+})

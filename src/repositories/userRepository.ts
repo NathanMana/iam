@@ -1,30 +1,43 @@
-import User from "./../entities/user"
-import {AppDataSource} from "./../lib/typeorm";
-
-const userRepository = AppDataSource.getRepository(User)
+import { DataSource, Repository } from "typeorm";
+import User from "./../entities/user";
 
 /**
- * Supprime tous les éléments de la table
+ * Utilisation du datasource au moment de l'initialisation de l'objet, autrement il y a une référence cyclique qui lance une erreur
  */
-const truncate = async () => {
-    const truncateResult = await userRepository
-        .createQueryBuilder('users')
-        .delete()
-        .from(User)
-        .execute()
+export default class UserRepository {
+  private repository: Repository<User>;
 
-    return truncateResult
+  constructor(dataSource: DataSource) {
+    this.repository = dataSource.getRepository(User);
+  }
+
+  /**
+   * Supprime tous les éléments de la table
+   */
+  truncate = async () => {
+    const truncateResult = await this.repository
+      .createQueryBuilder("users")
+      .delete()
+      .from(User)
+      .execute();
+
+    return truncateResult;
+  };
+
+  add = async (user: User) => {
+    await this.repository.save(user);
+  };
+
+  findByFirstname = async (firstname: string) => {
+    const user = this.repository.findOneBy({
+      firstname: firstname,
+    });
+    return user;
+  };
+
+  findByEmail = async (email: string) => {
+    return this.repository.findOneBy({
+      email: email,
+    });
+  };
 }
-
-const add = async (user: User) => {
-    await userRepository.save(user)
-}
-
-const findByFirstname  = async (firstname: string) => {
-    const user = userRepository.findOneBy({
-        firstname: firstname
-    })
-    return user
-}
-
-export default {truncate, add, findByFirstname};
