@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Index, ValueTransformer } from "typeorm"
 import { IsEmail, IsNotEmpty, ValidationError } from 'class-validator'
 import * as bcrypt from "bcrypt"
+import { resolve } from "path";
 
 @Entity()
 class User {
@@ -20,6 +21,7 @@ class User {
     email!: string;
     
     @Column()
+    // TODO: create a validation for password entropy
     passwordHash: string;
 
     constructor(firstname: string, lastname: string, passwordHash: string, email?: string) {
@@ -43,6 +45,10 @@ class User {
         }
         this.passwordHash = await bcrypt.hash(dto.password, 10);
       }
+
+    async isPasswordValid(password: string): Promise<boolean> {
+        return await bcrypt.compare(password, this.passwordHash)
+    }
 }
 
 export interface SetPasswordDTO {

@@ -58,14 +58,14 @@ describe('User', function () {
 
   describe('Password', function() {
     it('should be hashed', async () => {
-      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR");
+      const user = new User("Jean", "Marc", "password", "JEAN@MARC.FR");
       await user.setPassword({password: "password", passwordConfirmation: "password"})
       await userRepository.add(user)
       chai.expect(user.passwordHash).not.to.be.equal('password')
     });
 
     it('should throw a ValidationError if the password does not match', async () => {
-      const user = new User("Jean", "Marc", "azhkjazhkj62", "JEAN@MARC.FR");
+      const user = new User("Jean", "Marc", "password", "JEAN@MARC.FR");
       await user.setPassword({password: "password", passwordConfirmation: "password"})
       await userRepository.add(user)
       // à revoir 
@@ -76,5 +76,13 @@ describe('User', function () {
       chai.expect(validatePassword('password')).to.be.false
       chai.expect(validatePassword('fjdlvzgnzvbo212!!!fdsjkv')).to.be.true
     })
+
+    it('should be valid', async () => {
+      const user = new User("Jean", "Marc", "password", "JEAN@MARC.FR");
+      await user.setPassword({password: "password", passwordConfirmation: "password"})
+      await userRepository.add(user)
+      chai.expect(await user.isPasswordValid('password')).to.be.true
+      chai.expect(await user.isPasswordValid('pasdsword2')).to.be.false
+    });
   });
 })
