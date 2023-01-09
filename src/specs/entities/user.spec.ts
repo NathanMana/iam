@@ -1,13 +1,9 @@
 import * as chai from 'chai'
 import * as chaiAsPromised from 'chai-as-promised'
-import { assert, use } from 'chai'
+import { assert } from 'chai'
 import User from './../../entities/user'
 import {getAppDataSource} from './../../lib/typeorm'
 import UserRepository from "../../repositories/userRepository";
-import { QueryFailedError } from 'typeorm'
-import { ValidationError } from 'class-validator'
-import { validatePassword} from '../../lib/passwordEntropy'
-
 chai.use(chaiAsPromised);
 
 describe("User", function () {

@@ -12,9 +12,9 @@ dotenv.config()
  */
 export const getAppDataSource = () : DataSource => {
     return new DataSource({    
-        type: "postgres",
-        host: "127.0.0.1",
-        port: 5432,
+        type: "mysql",
+        host: "localhost",
+        port: 3306,
         username: process.env.DBB_USERNAME,
         password: process.env.DBB_PASSWORD,
         database: process.env.NODE_ENV === 'test' ? "iam_test": 'iam',

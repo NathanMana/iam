@@ -4,11 +4,11 @@
   "description": "Basic template of a node + typescript project",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -fr dist && tsc",
+    "build": "del /q dist && tsc",
     "lint": "eslint --fix src",
     "start": "node ./dist/index.js",
-    "test": "NODE_ENV=test&&mocha --env --recursive dist/specs --exit --async-stack-traces",
-    "launchTest": "npm run build && npm run test",
+    "test": "SET NODE_ENV=test&&mocha --env --recursive dist/specs --exit --async-stack-traces",
+    "launchTest": "npm run lint && npm run build && npm run test",
     "launch": "npm run lint && npm run build && npm run start"
   },
   "author": "Thomas VEILLARD",
