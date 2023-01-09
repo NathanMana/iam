@@ -6,9 +6,10 @@ import {
     BeforeUpdate,
     Index,
   } from "typeorm";
-import { IsNotEmpty, ValidationError, ValidatorConstraint } from "class-validator";
+import { IsNotEmpty, ValidationError } from "class-validator";
 import { UniqueInColumn } from "../decorators/uniqueInColumn";
 import * as bcrypt from "bcrypt"
+import { validatePassword } from "../lib/passwordEntropy";
 
 @Entity()
 class User {
@@ -29,7 +30,6 @@ class User {
     email!: string;
     
     @Column()
-    // TODO: create a validation for password entropy
     passwordHash!: string;
 
     constructor(firstname: string, lastname: string, email?: string) {
@@ -45,9 +45,8 @@ class User {
         if (this.email) this.email = this.email.toLowerCase();
     }
 
-    @ValidatorConstraint({ async: true })
     async setPassword(passwordDto: SetPasswordDTO) {
-        if (passwordDto.password !== passwordDto.passwordConfirmation) {
+        if ((passwordDto.password !== passwordDto.passwordConfirmation) || !validatePassword(passwordDto.password)) {
           throw new ValidationError();
         }
         this.passwordHash = await bcrypt.hash(passwordDto.password, 10);
