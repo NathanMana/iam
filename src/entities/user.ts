@@ -6,8 +6,8 @@ import { resolve } from "path";
 @Entity()
 class User {
 
-    @PrimaryGeneratedColumn()
-    id!: number;
+    @PrimaryGeneratedColumn("uuid")
+    id!: string;
 
     @Column()
     firstname: string;
