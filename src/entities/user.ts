@@ -1,7 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert, BeforeUpdate, Index, ValueTransformer } from "typeorm"
-import { IsEmail, IsNotEmpty, ValidationError } from 'class-validator'
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    BeforeInsert,
+    BeforeUpdate,
+    Index,
+  } from "typeorm";
+import { IsNotEmpty, ValidationError, ValidatorConstraint } from "class-validator";
+import { UniqueInColumn } from "../decorators/uniqueInColumn";
 import * as bcrypt from "bcrypt"
-import { resolve } from "path";
 
 @Entity()
 class User {
@@ -15,6 +22,7 @@ class User {
     @Column()
     lastname: string;
     
+    @UniqueInColumn({ message: "Email should be unique" })
     @Column()
     @Index({unique: true})
     @IsNotEmpty({message: 'email should not be empty'})
@@ -37,7 +45,7 @@ class User {
         if (this.email) this.email = this.email.toLowerCase();
     }
 
-
+    @ValidatorConstraint({ async: true })
     async setPassword(passwordDto: SetPasswordDTO) {
         if (passwordDto.password !== passwordDto.passwordConfirmation) {
           throw new ValidationError();
