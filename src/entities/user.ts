@@ -22,12 +22,11 @@ class User {
     
     @Column()
     // TODO: create a validation for password entropy
-    passwordHash: string;
+    passwordHash!: string;
 
-    constructor(firstname: string, lastname: string, passwordHash: string, email?: string) {
+    constructor(firstname: string, lastname: string, email?: string) {
         this.firstname = firstname;
         this.lastname = lastname;
-        this.passwordHash = passwordHash;
 
         if (email) this.email = email.toLowerCase();
     }
@@ -39,11 +38,11 @@ class User {
     }
 
 
-    async setPassword(dto: SetPasswordDTO) {
-        if (dto.password !== dto.passwordConfirmation) {
+    async setPassword(passwordDto: SetPasswordDTO) {
+        if (passwordDto.password !== passwordDto.passwordConfirmation) {
           throw new ValidationError();
         }
-        this.passwordHash = await bcrypt.hash(dto.password, 10);
+        this.passwordHash = await bcrypt.hash(passwordDto.password, 10);
       }
 
     async isPasswordValid(password: string): Promise<boolean> {
@@ -51,9 +50,9 @@ class User {
     }
 }
 
-export interface SetPasswordDTO {
-    password: string;
-    passwordConfirmation: string;
+export class SetPasswordDTO {
+    password!: string;
+    passwordConfirmation!: string;
 }
 
 export default User;
