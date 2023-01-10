@@ -1,5 +1,9 @@
-import {getAppDataSource} from "./lib/typeorm";
+import { getAppDataSource } from "./lib/typeorm";
 
-(async () => {
+async () => {
+  try {
     await getAppDataSource().initialize();
-})
+  } catch (e) {
+    console.error(e);
+  }
+};

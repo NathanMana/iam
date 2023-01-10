@@ -1,0 +1,29 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "CreateUserRequestBody",
+    "description": "Represent data in the body after form submission for creating user",
+    "type": "object",
+    "properties": {
+        "firstname": {
+            "type": "string",
+            "description": "User's firstname"
+        },
+        "lastname": {
+            "type": "string",
+            "description": "User's lastname"
+        },
+        "email": {
+            "type": "string",
+            "description": "User's email"
+        },
+        "password": {
+            "type": "string",
+            "description": "User's password"
+        },
+        "passwordConfirmation": {
+            "type": "string",
+            "description": "User's password confirmation"
+        }
+    },
+    "required": ["firstname", "lastname", "email", "password", "passwordConfirmation"]
+}

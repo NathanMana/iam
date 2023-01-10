@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "CreateSessionRequestBody",
+    "description": "Represents the session request body",
+    "type": "object",
+    "properties": {
+        "email": {
+            "type": "string",
+            "description": "User's email"
+        },
+        "password": {
+            "type": "string",
+            "description": "User's password"
+        }
+    },
+    "required": ["email", "password"]
+}
