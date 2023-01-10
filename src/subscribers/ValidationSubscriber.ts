@@ -1,14 +1,24 @@
-import { EntitySubscriberInterface, EventSubscriber, InsertEvent } from "typeorm";
+import { EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from "typeorm";
 import {validate} from 'class-validator';
-import User from "../entities/user";
 
 @EventSubscriber()
-export class ValidationSubscriber implements EntitySubscriberInterface {
+export class ValidationSubscriber<Entity extends {id: number}> implements EntitySubscriberInterface {
 
-    async beforeInsert(event: InsertEvent<User>) {
-        const errors = await validate(event.entity)
+    async beforeInsert(event: InsertEvent<Entity>) {
+        await this.manageValidation(event.entity)
+    }
+
+    async beforeUpdate(event: UpdateEvent<Entity>) {
+        if (!(event.entity instanceof event.databaseEntity.constructor())) 
+            throw new Error("Litteral type, not instance of object in database")
+
+        await this.manageValidation(event.entity as Entity)    
+    }
+
+    async manageValidation(entityValue: Entity) {
+        const errors = await validate(entityValue, {stopAtFirstError: true})
         if (!errors.length) return
 
-        throw errors[0];
+        throw errors[0]
     }
 }
