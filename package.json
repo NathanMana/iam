@@ -9,7 +9,13 @@
     "start": "node ./dist/index.js",
     "test": "SET NODE_ENV=test&&mocha --env --recursive dist/specs --exit --async-stack-traces",
     "launchTest": "npm run lint && npm run build && npm run test",
-    "launch": "npm run lint && npm run build && npm run start"
+    "launch": "npm run lint && npm run build && npm run start",
+    "build-mac": "rm -fr dist && tsc",
+    "lint-mac": "eslint --fix src",
+    "start-mac": "node ./dist/index.js",
+    "test-mac": "NODE_ENV=test&&mocha --env --recursive dist/specs --exit --async-stack-traces",
+    "launchTest-mac": "npm run build-mac && npm run test-mac",
+    "launch-mac": "npm run lint-mac && npm run build-mac && npm run start-mac"
   },
   "author": "Thomas VEILLARD",
   "license": "ISC",
