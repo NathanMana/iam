@@ -30,8 +30,8 @@ describe("/users", function () {
           firstname: "Jean",
           lastname: "Philippe",
           email: userEmail,
-          password: "password",
-          passwordConfirmation: "password",
+          password: "fjdlvzgnzvbo212!!!fdsjkv",
+          passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv",
         },
       });
 
