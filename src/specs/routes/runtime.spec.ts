@@ -2,6 +2,7 @@ import { describe } from "mocha";
 import fastify from 'fastify'
 import { assertsResponseSchemaPresenceHook } from "../../lib/fastify";
 import assert = require("assert");
+import {server as officialServer} from '../../lib/fastify'
 
 describe("Testing runtime configuration", () => {
     it("Should fail because no schema response", () => {
@@ -42,5 +43,22 @@ describe("Testing runtime configuration", () => {
                     return {messageStatus: 'ok'};
                 });
         })
+    })
+
+    it("Should returns http code 400 when additionnal properties in payload", async () => {
+        const response = await officialServer.inject({
+            path: "/web-api/users",
+            method: "POST",
+            payload: {
+                test: "salut",
+                firstname: "Jean",
+                lastname: "Philippe",
+                email: "jean@philippe.com",
+                password: "fjdlvzgnzvbo212!!!fdsjkv",
+                passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv",
+            }
+        })
+
+        assert.strictEqual(response.statusCode, 400)
     })
 })

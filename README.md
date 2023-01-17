@@ -43,3 +43,9 @@ The other one could be the trigger on certain type of events such as ValidationF
 **Question 1:** REST naming convention regroup best practices for naming RESTful APIs. For example, the use of clear and unabridged names in order to simplify the code comprehension for the code reviewer. For endpoint naming, using nouns (separated with hyphens when it contains multiple word) is Rest naming naming best practice, the use of slashes is the meaning of URI hierarchy.
 
 **Question 2:** POST /web-api/users is for user creation and POST /web-api/sessions is for session creation
+
+**Question 4:**
+If no schemas is provided for any of body, query and params, fastify doesn't throw anything. Body is an unknow type, such as query and params. 
+If the client submits an unknown property, according to the JSON schema then fastify doesn't do anything one more time.
+if the client omits a required property, according to the JSON schema then fastify automatically returns an error 400 without going through the route itself.
+

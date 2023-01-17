@@ -9,6 +9,7 @@ import User from "../../entities/user";
 import { FastifyInstance } from "fastify";
 
 export const userRoutes = (fastify: FastifyInstance) => {
+
   fastify.post<{
     Body: CreateUserRequestBodyInterface;
   }>(

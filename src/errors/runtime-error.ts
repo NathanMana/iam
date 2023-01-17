@@ -1,5 +1,3 @@
-import { RouteOptions } from "fastify";
-
 export class RuntimeError extends Error {
   routeURL: string;
 
