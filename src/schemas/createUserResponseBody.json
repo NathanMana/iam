@@ -1,5 +1,4 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
     "title" : "CreateUserResponseBody",
     "description": "Response format after user creation submission", 
     "type": "object",
@@ -21,5 +20,6 @@
             "description": "User's lastname"
         }
     },
+    "additionalProperties": false,
     "required": ["id", "email", "firstname", "lastname"]
 }

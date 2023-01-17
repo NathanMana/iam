@@ -1,6 +1,8 @@
 import Fastify from 'fastify'
 
-export function getSatisfy() {
+export const server = Fastify({logger: true})
+
+export function getFastify() {
     return Fastify({
         logger: true
     })
