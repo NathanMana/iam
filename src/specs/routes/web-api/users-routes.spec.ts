@@ -1,14 +1,13 @@
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
-// import { server } from "../../../lib/fastify"
 import { assert } from "chai";
-import server from "../../../routes/web-api/users-routes";
 import UserRepository from "../../../repositories/userRepository";
 import { getAppDataSource } from "../../../lib/typeorm";
+import { server } from "../../../lib/fastify";
 
 chai.use(chaiAsPromised);
 
-describe("/web-api/users", function () {
+describe("/users", function () {
   let userRepository: UserRepository;
 
   before(async function () {
@@ -23,7 +22,7 @@ describe("/web-api/users", function () {
   describe("POST #create", function () {
     it("should register the user", async function () {
       const userEmail = "jean@philippe.com"
-
+      
       const response = await server.inject({
         url: `/web-api/users`,
         method: "POST",
@@ -50,4 +49,5 @@ describe("/web-api/users", function () {
   // describe("PUT #update")
 
   // describe("DELETE #delete")
+
 });

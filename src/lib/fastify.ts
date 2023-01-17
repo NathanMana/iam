@@ -1,9 +1,8 @@
-import Fastify from 'fastify'
+import fastify from 'fastify'
+import { webApiRoutes } from '../routes/web-api/web-api-routes';
 
-export const server = Fastify({logger: true})
+// export const server = fastify({logger: true})
+//     .register(webApiRoutes, { prefix: '/web-api' })
 
-export function getFastify() {
-    return Fastify({
-        logger: true
-    })
-}
+export const server = fastify({logger: true})
+    .register(webApiRoutes, { prefix: '/web-api'})

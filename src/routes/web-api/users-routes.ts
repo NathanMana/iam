@@ -1,4 +1,3 @@
-import { server } from "../../lib/fastify";
 import * as CreateSessionRequestBody from "../../schemas/createSessionRequestBody.json";
 import * as CreateUserRequestBody from "../../schemas/createUserRequestBody.json";
 import * as CreateUserResponseBody from "../../schemas/createUserResponseBody.json";
@@ -8,31 +7,37 @@ import { CreateSessionRequestBody as CreateSessionRequestBodyInterface } from ".
 import UserRepository from "../../repositories/userRepository";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
 import User from "../../entities/user";
+import { FastifyInstance } from "fastify";
 
-server.post<{
-  Body: CreateUserRequestBodyInterface
-}>(
-  "/web-api/users",
-  {
-    schema: {
-      body: CreateUserRequestBody,
+export const userRoutes = (fastify: FastifyInstance) => {
+  fastify.post<{
+    Body: CreateUserRequestBodyInterface;
+  }>(
+    "",
+    {
+      schema: {
+        body: CreateUserRequestBody,
+      },
     },
-  },
-  async (request, response) => {
-    const appDataSource = await getAppDataSourceInitialized()
-    const userRepository = new UserRepository(appDataSource)
+    async (request, response) => {
+      const appDataSource = await getAppDataSourceInitialized();
+      const userRepository = new UserRepository(appDataSource);
 
-    const user = new User(
-      request.body.firstname, 
-      request.body.lastname, 
-      request.body.email,
+      const user = new User(
+        request.body.firstname,
+        request.body.lastname,
+        request.body.email
       );
-    await user.setPassword({password: "fjdlvzgnzvbo212!!!fdsjkv", passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv"})
+      await user.setPassword({
+        password: "fjdlvzgnzvbo212!!!fdsjkv",
+        passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv",
+      });
 
-    await userRepository.add(user)
+      await userRepository.add(user);
 
-    return response.send();
-  }
-);
+      return response.send();
+    }
+  );
 
-export default server
+  return fastify
+};
