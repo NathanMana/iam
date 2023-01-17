@@ -71,7 +71,7 @@ describe("User", function () {
       chai.expect(user.passwordHash).not.to.be.equal('fjdlvzgnzvbo212!!!fdsjkv')
     });
 
-    it('should throw a ValidationError if the password does not match', async () => {
+    it('should throw an error if the password does not match', async () => {
       const user = new User("Jean", "Marc", "JEAN@MARC.FR");
       await chai.expect(user.setPassword({password: "fjdlvzgnzvbo212!!!fdsjkv", passwordConfirmation: "fjdlvzgnzvbo212!!!"})).to.be.eventually.rejected;
     });
@@ -79,7 +79,7 @@ describe("User", function () {
     it('should have at least 80 bits of entropy', async () => {
       const user = new User("Jean", "Marc", "JEAN@MARC.FR")
       await chai.expect(user.setPassword({password: "fjdlvzgnzvbo212!!!fdsjkv", passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv"})).to.be.eventually.fulfilled;
-      await chai.expect(user.setPassword({password: "az", passwordConfirmation: "az"})).to.be.eventually.rejected;
+      await chai.expect(user.setPassword({password: "password", passwordConfirmation: "password"})).to.be.eventually.rejected;
     })
 
     it('should be valid', async () => {

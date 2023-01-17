@@ -10,6 +10,7 @@ import { IsNotEmpty, ValidationError } from "class-validator";
 import { UniqueInColumn } from "../decorators/uniqueInColumn";
 import * as bcrypt from "bcrypt"
 import { validatePassword } from "../lib/passwordEntropy";
+import { error } from "console";
 
 @Entity()
 class User {
@@ -46,14 +47,17 @@ class User {
     }
 
     async setPassword(passwordDto: SetPasswordDTO) {
-        if ((passwordDto.password !== passwordDto.passwordConfirmation) || !validatePassword(passwordDto.password)) {
-          throw new ValidationError();
+        if (passwordDto.password !== passwordDto.passwordConfirmation) {
+          throw error("password confirmation and password does not match");
+        }
+        if (!validatePassword(passwordDto.password)){
+          throw error("password cannot be validated")
         }
         this.passwordHash = await bcrypt.hash(passwordDto.password, 10);
       }
 
     async isPasswordValid(password: string): Promise<boolean> {
-        return await bcrypt.compare(password, this.passwordHash)
+      return await bcrypt.compare(password, this.passwordHash)
     }
 }
 

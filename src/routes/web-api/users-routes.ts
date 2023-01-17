@@ -32,7 +32,6 @@ export const userRoutes = (fastify: FastifyInstance) => {
         password: request.body.password,
         passwordConfirmation: request.body.passwordConfirmation,
       });
-      await user.isPasswordValid(request.body.password);
       await userRepository.add(user);
 
       return response.send();
