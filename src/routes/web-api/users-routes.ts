@@ -3,7 +3,6 @@ import * as CreateSessionRequestBody from "../../schemas/createSessionRequestBod
 import * as CreateUserRequestBody from "../../schemas/createUserRequestBody.json";
 import * as CreateUserResponseBody from "../../schemas/createUserResponseBody.json";
 import { CreateUserRequestBody as CreateUserRequestBodyInterface } from "../../types/createUserRequestBody";
-import { CreateUserResponseBody as CreateUserResponseBodyInterface } from "../../types/createUserResponseBody";
 import { CreateSessionRequestBody as CreateSessionRequestBodyInterface } from "../../types/createSessionRequestBody";
 import UserRepository from "../../repositories/userRepository";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
@@ -16,6 +15,7 @@ server.post<{
   {
     schema: {
       body: CreateUserRequestBody,
+      response: { 200: CreateUserResponseBody}
     },
   },
   async (request, response) => {
@@ -27,8 +27,8 @@ server.post<{
       request.body.lastname, 
       request.body.email,
       );
-    await user.setPassword({password: "fjdlvzgnzvbo212!!!fdsjkv", passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv"})
-
+    await user.setPassword({password: request.body.password, passwordConfirmation: request.body.passwordConfirmation})
+    await user.isPasswordValid(request.body.password)
     await userRepository.add(user)
 
     return response.send();
