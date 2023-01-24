@@ -19,10 +19,10 @@ class User {
     id!: string;
 
     @Column()
-    firstname: string;
+    firstname!: string;
     
     @Column()
-    lastname: string;
+    lastname!: string;
     
     @UniqueInColumn({ message: "Email should be unique" })
     @Column()
@@ -33,10 +33,9 @@ class User {
     @Column()
     passwordHash!: string;
 
-    constructor(firstname: string, lastname: string, email?: string) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-
+    constructor(firstname?: string, lastname?: string, email?: string) {
+        if (lastname) this.lastname = lastname;
+        if (firstname) this.firstname = firstname;
         if (email) this.email = email.toLowerCase();
     }
 

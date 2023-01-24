@@ -3,6 +3,7 @@ import { DataSource } from "typeorm"
 
 // Entities
 import User from '../entities/user'
+import Session from '../entities/session'
 import { ValidationSubscriber } from '../subscribers/ValidationSubscriber'
 import { DBB_NAME, DBB_PASSWORD, DBB_PORT, DBB_USERNAME } from './dotenv'
 
@@ -19,7 +20,7 @@ export const getAppDataSource = () : DataSource => {
         username: DBB_USERNAME,
         password: DBB_PASSWORD,
         database: DBB_NAME,
-        entities: [User],
+        entities: [User, Session],
         synchronize: true,
         subscribers: [ValidationSubscriber]
     })
