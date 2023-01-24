@@ -2,20 +2,17 @@ import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 import { getAppDataSource } from "../../../lib/typeorm";
 import UserRepository from "../../../repositories/userRepository";
-import SessionRepository from "../../../repositories/sessionRepository";
-import { buildUserFixture, createUserFixture } from "../../fixtures/users-fixtures";
+import { buildUserFixture } from "../../fixtures/users-fixtures";
 import { server } from "../../../lib/fastify";
 import { assert } from 'chai'
 chai.use(chaiAsPromised);
 
 describe("/sessions", function () {
   let userRepository: UserRepository;
-  let sessionRepository: SessionRepository;
 
   before(async function () {
     const dataSource = await getAppDataSource().initialize();
     userRepository = new UserRepository(dataSource);
-    sessionRepository = new SessionRepository(dataSource);
   });
 
   beforeEach(async function () {
