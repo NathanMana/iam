@@ -1,10 +1,8 @@
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
 import { assert } from "chai";
-import User from "./../../entities/user";
 import { getAppDataSource } from "./../../lib/typeorm";
 import UserRepository from "../../repositories/userRepository";
-// import { createSessionFixture } from '../fixtures/sessions-fixtures'
 import SessionRepository from "../../repositories/sessionRepository";
 import { createSessionFixture } from "../fixtures/sessions-fixtures";
 chai.use(chaiAsPromised);

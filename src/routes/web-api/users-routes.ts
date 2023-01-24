@@ -1,8 +1,6 @@
-import * as CreateSessionRequestBody from "../../schemas/createSessionRequestBody.json";
 import * as CreateUserRequestBody from "../../schemas/createUserRequestBody.json";
 import * as CreateUserResponseBody from "../../schemas/createUserResponseBody.json";
 import { CreateUserRequestBody as CreateUserRequestBodyInterface } from "../../types/createUserRequestBody";
-import { CreateSessionRequestBody as CreateSessionRequestBodyInterface } from "../../types/createSessionRequestBody";
 import UserRepository from "../../repositories/userRepository";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
 import User from "../../entities/user";
@@ -34,9 +32,14 @@ export const userRoutes = (fastify: FastifyInstance) => {
         passwordConfirmation: request.body.passwordConfirmation,
       });
 
-      await userRepository.add(user);
+      const dbbUser = await userRepository.add(user);
 
-      return response.send();
+      return response.send({
+        id: dbbUser.id,
+        email: dbbUser.email, 
+        lastname: dbbUser.lastname,
+        firstname: dbbUser.firstname
+      });
     }
   );
 

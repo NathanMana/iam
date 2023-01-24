@@ -1,8 +1,10 @@
-import { ValidationError } from "class-validator";
+import * as cookies from '@fastify/cookie'
 import fastify, { FastifyError, FastifyReply, FastifyRequest, RouteOptions } from "fastify";
+import { ValidationError } from "class-validator";
 import { EntityNotFoundError } from "typeorm";
 import { RuntimeError } from "../errors/runtime-error";
 import { webApiRoutes } from "../routes/web-api/web-api-routes";
+import { FASTIFY_COOKIES_SECRET } from "./dotenv";
 
 export const server = fastify({ 
     logger: false,
@@ -16,6 +18,10 @@ export const server = fastify({
   .addHook("onRoute", assertsResponseSchemaPresenceHook)
   .register(webApiRoutes, {
     prefix: "/web-api",
+  })
+  .register(cookies, {
+    secret: FASTIFY_COOKIES_SECRET,
+    hook: 'onRequest'
   });
 
 /**

@@ -25,7 +25,7 @@ export default class SessionRepository {
   };
 
   add = async (session: Session) => {
-    await this.repository.save(session);
+   return await this.repository.save(session);
   };
 
   findFirst = async () => {
