@@ -41,6 +41,27 @@ describe("/users", function () {
       const createdUser = await userRepository.findByEmail(userEmail)
       assert.isNotNull(createdUser)
     });
+
+
+    // it("should return a 'Bad Request' response", async () => {
+    //   const response = await server.inject({
+    //     url: `/web-api/users`,
+    //     method: "POST",
+    //     payload: {
+    //       firstname: "Jean",
+    //       lastname: "Philippe",
+    //       email: "",
+    //       password: "fjdlvzgnzvbo212!!!fdsjkv",
+    //       passwordConfirmation: "fjdlvzgnzvbo212!!!fdsjkv",
+    //     },
+    //   });
+
+    //   assert.equal(response.json(), {
+    //     error: "A bad request has occured, check out your submission",
+    //     message: 'Bad request',
+    //     statusCode: 400,
+    //   });
+    // })
   });
 
   // describe("GET #user")

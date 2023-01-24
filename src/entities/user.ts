@@ -6,7 +6,7 @@ import {
     BeforeUpdate,
     Index,
   } from "typeorm";
-import { IsNotEmpty, ValidationError } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 import { UniqueInColumn } from "../decorators/uniqueInColumn";
 import * as bcrypt from "bcrypt"
 import { validatePassword } from "../lib/passwordEntropy";

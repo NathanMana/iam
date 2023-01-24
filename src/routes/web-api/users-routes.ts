@@ -33,6 +33,7 @@ export const userRoutes = (fastify: FastifyInstance) => {
         password: request.body.password,
         passwordConfirmation: request.body.passwordConfirmation,
       });
+
       await userRepository.add(user);
 
       return response.send();
