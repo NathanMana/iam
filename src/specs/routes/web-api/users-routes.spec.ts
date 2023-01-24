@@ -4,6 +4,7 @@ import { assert } from "chai";
 import UserRepository from "../../../repositories/userRepository";
 import { getAppDataSource } from "../../../lib/typeorm";
 import { server } from "../../../lib/fastify";
+import { doesNotMatch } from "assert";
 
 chai.use(chaiAsPromised);
 

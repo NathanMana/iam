@@ -49,3 +49,26 @@ If no schemas is provided for any of body, query and params, fastify doesn't thr
 If the client submits an unknown property, according to the JSON schema then fastify doesn't do anything one more time.
 if the client omits a required property, according to the JSON schema then fastify automatically returns an error 400 without going through the route itself.
 
+**Question 5:**
+|                                                       |  Stateful Session |  	Stateless Session (JWT) |   
+|-------------------------------------------------------|-------------------|---------------------------|
+|  Scalability                                          | 	High            |   High                    |   
+| Architecture Complexity                               | 	High            | Low                       |   
+| Type and Quantity of Information Known by the Client  | 	High (session identifier)           | Low (encoded data)                    |   
+|Revocation Strategy | Easy (can be removed from backen service) | Difficult (Can be revoked by backend service, but requires additional implementation ) |   
+| Impact if a Session Leaks  | Severe  |  Limited |   
+| Common Weaknesses Due to Misconfigurations  | data leakage, improper session management  | weak secret key, insecure storage  |  
+| Client-side Strategy to Protect and Submit Token  | storing it in a cookie with a secure flag  | Send it in the headers with each request  |   
+| Additional Library Requirements  | Backend-specific session management libraries  | Libraries for JWT signing and verification  |  
+
+**Question 6:**
+Solutions to protect the confidentiality of the session identifier stored in a browser’s cookie:
+
+* Instead of storing the session data in the browser's cookie, storing it on the server will prevent the session data from being stolen if the cookie is intercepted. Same for the encryption, encrypt the session identifier on the server before storing it in the cookie.
+* Setting a session timeout to limit the duration of a session. 
+* Using secure cookies by setting the "Secure" flag on the cookie for example, This will prevent the cookie from being intercepted if the connection is insecure.
+* Using HTTP-Only cookies by setting the "HttpOnly" flag on the cookie, in order prevent potential XSS attacks from stealing the cookie.
+* Using Content Security Policy (CSP) allow you to  specify what sources of content are allowed to execute in a page, this will prevent any malicious code from executing on your website that could steal the session identifier.
+
+
+
