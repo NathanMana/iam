@@ -4,7 +4,9 @@ import { assert } from "chai";
 import { getAppDataSource } from "./../../lib/typeorm";
 import UserRepository from "../../repositories/userRepository";
 import SessionRepository from "../../repositories/sessionRepository";
-import { createSessionFixture } from "../fixtures/sessions-fixtures";
+import { buildSessionFixture, createSessionFixture } from "../fixtures/sessions-fixtures";
+import { createUserFixture } from "../fixtures/users-fixtures";
+import Session from "../../entities/session";
 chai.use(chaiAsPromised);
 
 describe("Session", function () {
@@ -24,6 +26,16 @@ describe("Session", function () {
   });
 
   describe("Session creation", () => {
+
+    it("Test de merde", async () => {
+      const user = await createUserFixture()
+      const session = buildSessionFixture({user})
+      await sessionRepository.add(session)
+      const sessionDBB = await sessionRepository.findFirst();
+      console.log(sessionDBB)
+      assert.isNotNull(sessionDBB);
+    })
+
     it("Creation", async () => {
       await createSessionFixture();
 
