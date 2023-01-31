@@ -6,6 +6,7 @@ import {
 } from "../../lib/fastify";
 import assert = require("assert");
 import { server as officialServer } from "../../lib/fastify";
+import { CreateUserRequestBody as CreateUserRequestBodyInterface } from "../../types/createUserRequestBody";
 
 describe("Testing runtime configuration", () => {
   it("Should fail because no schema response", () => {
@@ -16,35 +17,6 @@ describe("Testing runtime configuration", () => {
       server.get("/test", () => {
         return { statusMessage: "ok" };
       });
-    });
-  });
-
-  it("Should works when schema response", () => {
-    const server = fastify({ logger: false });
-    server.addHook("onRoute", assertsResponseSchemaPresenceHook);
-    server.addSchema({
-      $id: "schemaId",
-      type: "object",
-      properties: {
-        messageStatus: { type: "string" },
-        status: { type: "number" },
-      },
-      additionalProperties: false,
-    });
-    const responseSchema = server.getSchema("schemaId");
-
-    assert.doesNotThrow(() => {
-      server.get(
-        "/test",
-        {
-          schema: {
-            response: responseSchema,
-          },
-        },
-        () => {
-          return { messageStatus: "ok" };
-        }
-      );
     });
   });
 
@@ -63,6 +35,63 @@ describe("Testing runtime configuration", () => {
     });
 
     assert.strictEqual(response.statusCode, 400);
+  });
+  it("Should works when schema response is valid", () => {
+    const server = fastify({ logger: false });
+    const bodyJsonSchema = {
+      type: "object",
+      properties: {
+        firstname: { type: "string" },
+        lastname: { type: "string" },
+        email: { type: "string" },
+        password: { type: "string" },
+        passwordConfirmation: { type: "string" },
+      },
+      additionalProperties: false,
+      required: [
+        "firstname",
+        "lastname",
+        "email",
+        "password",
+        "passwordConfirmation",
+      ],
+    };
+    server.addHook("onRoute", assertsResponseSchemaPresenceHook);
+    server.addSchema({
+      $id: "schemaId",
+      type: "object",
+      properties: {
+        messageStatus: { type: "string" },
+        status: { type: "number" },
+      },
+      additionalProperties: false,
+    });
+    const responseSchema = server.getSchema("schemaId");
+    const queryStringJsonSchema = {
+      type: "object",
+      properties: {},
+    };
+
+    const paramsJsonSchema = {
+      type: "object",
+      properties: {},
+    };
+
+    assert.doesNotThrow(() => {
+      server.get(
+        "/test",
+        {
+          schema: {
+            querystring: queryStringJsonSchema,
+            params: paramsJsonSchema,
+            response: responseSchema,
+          },
+        },
+        () => {
+          return { messageStatus: "ok" };
+        }
+      );
+    });
   });
 
   it("Should send error 404", async () => {

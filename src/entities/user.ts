@@ -11,6 +11,7 @@ import { UniqueInColumn } from "../decorators/uniqueInColumn";
 import * as bcrypt from "bcrypt"
 import { validatePassword } from "../lib/passwordEntropy";
 import { error } from "console";
+import { EntityError } from "../errors/entity-error";
 
 @Entity()
 class User {
@@ -48,10 +49,10 @@ class User {
 
     async setPassword(passwordDto: SetPasswordDTO) {
         if (passwordDto.password !== passwordDto.passwordConfirmation) {
-          throw error("password confirmation and password does not match");
+          throw new EntityError("password confirmation and password does not match", passwordDto);
         }
         if (!validatePassword(passwordDto.password)){
-          throw error("password cannot be validated")
+          throw new EntityError("password cannot be validated", passwordDto);
         }
         this.passwordHash = await bcrypt.hash(passwordDto.password, 10);
       }

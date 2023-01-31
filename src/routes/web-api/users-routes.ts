@@ -7,6 +7,14 @@ import UserRepository from "../../repositories/userRepository";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
 import User from "../../entities/user";
 import { FastifyInstance } from "fastify";
+import { error } from "console";
+
+const paramsJsonSchema = {
+  type: 'object'
+}
+const queryStringJsonSchema = {
+  type: 'object'
+}
 
 export const userRoutes = (fastify: FastifyInstance) => {
 
@@ -17,7 +25,9 @@ export const userRoutes = (fastify: FastifyInstance) => {
     {
       schema: {
         body: CreateUserRequestBody,
-        response: { 200: CreateUserResponseBody },
+        params: paramsJsonSchema,
+        querystring: queryStringJsonSchema,
+        response: { 200: CreateUserResponseBody }
       },
     },
     async (request, response) => {
@@ -34,8 +44,9 @@ export const userRoutes = (fastify: FastifyInstance) => {
         passwordConfirmation: request.body.passwordConfirmation,
       });
 
+        
       await userRepository.add(user);
-
+      
       return response.send();
     }
   );
