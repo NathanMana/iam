@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import User from '../../entities/user.js'
-import { getAppDataSource } from '../../lib/typeorm.js'
+import { getAppDataSourceInitialized } from '../../lib/typeorm.js'
 
 type UserFixtureOptions = Partial<Pick<User, 'firstname' | 'lastname' | 'email'>>
 
@@ -17,6 +17,6 @@ export function buildUserFixture(opts: UserFixtureOptions = {}) {
   return user
 }
 
-export function createUserFixture(opts: UserFixtureOptions = {}) {
-  return getAppDataSource().getRepository(User).save(buildUserFixture(opts))
+export async function createUserFixture(opts: UserFixtureOptions = {}) {
+  return (await getAppDataSourceInitialized()).getRepository(User).save(buildUserFixture(opts))
 }
