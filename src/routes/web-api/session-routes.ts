@@ -1,5 +1,7 @@
+import { use } from "chai";
 import { FastifyInstance } from "fastify";
 import Session from "../../entities/session";
+import { saveSession } from "../../lib/session";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
 import SessionRepository from "../../repositories/sessionRepository";
 import UserRepository from "../../repositories/userRepository";
@@ -29,20 +31,8 @@ export const sessionRoutes = (fastify: FastifyInstance) => {
       if (!isPasswordValid) {
         return res.status(404).send({ message: "Bad credentials" });
       }
-
-      const sessionRepository = new SessionRepository(appDataSource);
-      const session = new Session();
-      session.user = user;
-      const dbbSession = await sessionRepository.add(session);
-
+      await saveSession(res, user);
       return res
-        .setCookie("session", dbbSession.token, {
-          signed: true,
-          httpOnly: true,
-          secure: true,
-          maxAge: 30 * 24 * 60 * 60 * 1000,
-        })
-        .send({});
     }
   );
 

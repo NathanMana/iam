@@ -5,6 +5,10 @@ import UserRepository from "../../repositories/userRepository";
 import { getAppDataSourceInitialized } from "../../lib/typeorm";
 import User from "../../entities/user";
 import { FastifyInstance } from "fastify";
+import Session from "../../entities/session";
+import SessionRepository from "../../repositories/sessionRepository";
+import { loadSession } from "../../lib/session";
+import { verify } from "crypto";
 
 export const userRoutes = (fastify: FastifyInstance) => {
 
@@ -42,6 +46,28 @@ export const userRoutes = (fastify: FastifyInstance) => {
       });
     }
   );
+
+  fastify.get('/me', {
+    schema: {
+      response: { 200: CreateUserResponseBody },
+    },
+  }, async (request, response) => {
+    const now = new Date();
+    if (((request.session?.expiresAt) &&(request.session?.expiresAt < now))||(request.session?.revokedAt)) {
+      await response.status(401).send({ error: 'Unauthorized' })
+      return
+    }
+    if (!request.user) {
+      await response.status(401).send({ error: 'Unauthorized' })
+      return
+    }
+    return response.send({
+      id: request.user.id,
+      email: request.user.email, 
+      lastname: request.user.lastname,
+      firstname: request.user.firstname
+    });
+  })
 
   return fastify;
 };

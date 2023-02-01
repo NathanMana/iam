@@ -27,15 +27,6 @@ describe("Session", function () {
 
   describe("Session creation", () => {
 
-    it("Test de merde", async () => {
-      const user = await createUserFixture()
-      const session = buildSessionFixture({user})
-      await sessionRepository.add(session)
-      const sessionDBB = await sessionRepository.findFirst();
-      console.log(sessionDBB)
-      assert.isNotNull(sessionDBB);
-    })
-
     it("Creation", async () => {
       await createSessionFixture();
 

@@ -12,6 +12,9 @@ import * as crypto from "crypto";
 
 @Entity()
 export default class Session {
+  static findOne(arg0: { id: string; }) {
+      throw new Error('Method not implemented.');
+  }
   @PrimaryGeneratedColumn("uuid")
   id!: string;
 

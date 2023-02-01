@@ -5,6 +5,7 @@ import { EntityNotFoundError } from "typeorm";
 import { RuntimeError } from "../errors/runtime-error";
 import { webApiRoutes } from "../routes/web-api/web-api-routes";
 import { FASTIFY_COOKIES_SECRET } from "./dotenv";
+import { loadSession } from './session';
 
 export const server = fastify({ 
     logger: false,
@@ -16,12 +17,16 @@ export const server = fastify({
   })
   .setErrorHandler(errorHandler)
   .addHook("onRoute", assertsResponseSchemaPresenceHook)
+  .addHook("preHandler", loadSession)
   .register(webApiRoutes, {
     prefix: "/web-api",
   })
   .register(cookies, {
     secret: FASTIFY_COOKIES_SECRET,
     hook: 'onRequest'
+  })
+  .decorateRequest('request', function () {
+    
   });
 
 /**

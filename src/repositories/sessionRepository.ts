@@ -33,4 +33,8 @@ export default class SessionRepository {
         take: 1
     })).pop();
   }
+
+  findOneByToken = async (token : string) => {
+    return (await this.repository.findOneBy({token: token}))
+  }
 }
