@@ -5,6 +5,9 @@ import UserRepository from "../../../repositories/userRepository";
 import { buildUserFixture } from "../../fixtures/users-fixtures";
 import { server } from "../../../lib/fastify";
 import { assert } from 'chai'
+import { createSessionFixture } from "../../fixtures/sessions-fixtures";
+import fastifyCookie = require("@fastify/cookie");
+import { FASTIFY_COOKIES_SECRET } from "../../../lib/dotenv";
 chai.use(chaiAsPromised);
 
 describe("/sessions", function () {
@@ -129,5 +132,21 @@ describe("/sessions", function () {
     })
 
     assert.equal(response.statusCode, 404)
+  })
+
+
+  it("Should delete session", async() => {
+    const session = await createSessionFixture();
+    const cookie = fastifyCookie.sign(session.token, FASTIFY_COOKIES_SECRET);
+
+    const response = await server.inject({
+        url: '/web-api/sessions/current',
+        method: 'DELETE',
+        cookies: {
+            session: cookie
+        }
+    })
+
+    assert.equal(response.statusCode, 200);
   })
 });

@@ -36,5 +36,15 @@ export const sessionRoutes = (fastify: FastifyInstance) => {
     }
   );
 
+  fastify.delete('/current', {}, async (request, response) => {
+    const session = request.session as Session;
+    session.revokedAt = new Date();
+
+    const appDataSource = await getAppDataSourceInitialized();
+    const sessionRepository = new SessionRepository(appDataSource);
+    const _ = sessionRepository.save(session) // inutile d'attendre
+    return response.send({status: 'destroyed'});
+  })
+
   return fastify;
 };

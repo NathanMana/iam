@@ -28,6 +28,10 @@ export default class SessionRepository {
    return await this.repository.save(session);
   };
 
+  save = async (session: Session) => {
+    return this.repository.save(session);
+  }
+
   findFirst = async () => {
     return (await this.repository.find({
         take: 1
@@ -37,4 +41,5 @@ export default class SessionRepository {
   findOneByToken = async (token : string) => {
     return (await this.repository.findOneBy({token: token}))
   }
+
 }
