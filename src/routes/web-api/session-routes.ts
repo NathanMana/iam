@@ -36,7 +36,11 @@ export const sessionRoutes = (fastify: FastifyInstance) => {
     }
   );
 
-  fastify.delete('/current', {}, async (request, response) => {
+  fastify.delete('/current', {
+    schema: {
+      response: {},
+    },
+  }, async (request, response) => {
     const session = request.session as Session;
     session.revokedAt = new Date();
 
