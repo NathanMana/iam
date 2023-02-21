@@ -24,9 +24,6 @@ export const server = fastify({
   .register(cookies, {
     secret: FASTIFY_COOKIES_SECRET,
     hook: 'onRequest'
-  })
-  .decorateRequest('request', function () {
-    
   });
 
 /**
