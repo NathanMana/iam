@@ -11,6 +11,7 @@ if (!process.env.DBB_PASSWORD) throw Error("dbb password is undefined")
 if (!process.env.NODE_ENV) throw Error("NODE_ENV is undefined")
 if (!process.env.FASTIFY_PORT) throw Error("FASTIFY_PORT is undefined")
 if (!process.env.FASTIFY_ADDR) throw Error("FASTIFY_ADDR is undefined")
+if (!process.env.FASTIFY_COOKIES_SECRET) throw Error("FASTIFY_COOKIES_SECRET is undefined")
 
 if (isNaN(parseInt(process.env.FASTIFY_PORT))) throw Error("FASTIFY_PORT not in a correct format")
 
@@ -28,3 +29,4 @@ export const DBB_PORT = dbbport
 
 export const FASTIFY_PORT = parseInt(process.env.FASTIFY_PORT)
 export const FASTIFY_ADDR = process.env.FASTIFY_ADDR
+export const FASTIFY_COOKIES_SECRET = process.env.FASTIFY_COOKIES_SECRET

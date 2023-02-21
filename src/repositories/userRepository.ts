@@ -24,8 +24,8 @@ export default class UserRepository {
     return truncateResult;
   };
 
-  add = async (user: User) => {
-    await this.repository.save(user);
+  add = (user: User) => {
+    return this.repository.save(user);
   };
 
   findByFirstname = async (firstname: string) => {
@@ -37,7 +37,7 @@ export default class UserRepository {
 
   findByEmail = async (email: string) => {
     return this.repository.findOneBy({
-      email: email,
+      email: email.toLowerCase(),
     });
   };
 }
