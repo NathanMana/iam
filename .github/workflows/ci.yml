@@ -33,3 +33,10 @@ jobs:
 #    steps:
 #    - name: Run tests
 #      run: npm run launchTest-mac
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Lint with ES lint
+      run: npm run lint-mac
